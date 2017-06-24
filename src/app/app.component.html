@@ -1,20 +1,49 @@
-<!--The whole content below can be removed with the new code.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{title}}!!
-  </h1>
-  <img width="300" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxOS4xLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjxzdmcgdmVyc2lvbj0iMS4xIiBpZD0iTGF5ZXJfMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiDQoJIHZpZXdCb3g9IjAgMCAyNTAgMjUwIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAyNTAgMjUwOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQo8c3R5bGUgdHlwZT0idGV4dC9jc3MiPg0KCS5zdDB7ZmlsbDojREQwMDMxO30NCgkuc3Qxe2ZpbGw6I0MzMDAyRjt9DQoJLnN0MntmaWxsOiNGRkZGRkY7fQ0KPC9zdHlsZT4NCjxnPg0KCTxwb2x5Z29uIGNsYXNzPSJzdDAiIHBvaW50cz0iMTI1LDMwIDEyNSwzMCAxMjUsMzAgMzEuOSw2My4yIDQ2LjEsMTg2LjMgMTI1LDIzMCAxMjUsMjMwIDEyNSwyMzAgMjAzLjksMTg2LjMgMjE4LjEsNjMuMiAJIi8+DQoJPHBvbHlnb24gY2xhc3M9InN0MSIgcG9pbnRzPSIxMjUsMzAgMTI1LDUyLjIgMTI1LDUyLjEgMTI1LDE1My40IDEyNSwxNTMuNCAxMjUsMjMwIDEyNSwyMzAgMjAzLjksMTg2LjMgMjE4LjEsNjMuMiAxMjUsMzAgCSIvPg0KCTxwYXRoIGNsYXNzPSJzdDIiIGQ9Ik0xMjUsNTIuMUw2Ni44LDE4Mi42aDBoMjEuN2gwbDExLjctMjkuMmg0OS40bDExLjcsMjkuMmgwaDIxLjdoMEwxMjUsNTIuMUwxMjUsNTIuMUwxMjUsNTIuMUwxMjUsNTIuMQ0KCQlMMTI1LDUyLjF6IE0xNDIsMTM1LjRIMTA4bDE3LTQwLjlMMTQyLDEzNS40eiIvPg0KPC9nPg0KPC9zdmc+DQo=" />
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" href="http://angularjs.blogspot.ca/">Angular blog</a></h2>
-  </li>
-</ul>
+<section [ngClass]="{'isLoading': loading}">
+  <section class="loading-spinner"></section>
+  <section class="event-list">
+    <h1>Powerlifting Meets</h1>
 
+    <h2>Filtered States: {{selectedStates}}</h2>
+
+    <h2>Filter</h2>
+
+    <button (click)="clearFilter(states)">Clear States Filter</button>
+    <section *ngFor="let state of states">
+      <input id="{{state.name}}" type="checkbox" [(ngModel)]="state.checked" (change)="updateFilteredEvents()"> <label for="{{state.name}}">{{state.name}}</label>
+    </section>
+
+    <button (click)="clearFilter(types)">Clear Types Filter</button>
+    <section *ngFor="let type of types">
+      <input id="{{type.name}}" type="checkbox" [(ngModel)]="type.checked" (change)="updateFilteredEvents()"> <label for="{{type.name}}">{{type.name}}</label>
+    </section>
+
+    <table>
+      <tr>
+        <th>Date</th>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Address</th>
+        <th>Director</th>
+        <th>Federation</th>
+        <th>Sanction</th>
+        <th>Link</th>
+      </tr>
+      <tr *ngFor="let event of filteredEvents">
+        <td>{{event.date | date}}</td>
+        <td [innerHTML]= event.name></td>
+        <td>{{event.type}}</td>
+        <td>{{event.location.address}}</td>
+        <td>
+          <div *ngIf="event.director.name && event.director.email; else elseBlock"><a href="mailto:{{event.director.email}}">{{event.director.name}}</a></div>
+           <ng-template #elseBlock>{{event.director.name}}
+            <div *ngIf="event.director.name; else emailBlock">{{event.director.name}}</div>
+             <ng-template #emailBlock><div *ngIf="event.director.email"><a href="mailto:{{event.director.email}}">{{event.director.email}}</a></div></ng-template>
+          </ng-template>
+        </td>
+        <td>{{event.federation}}</td>
+        <td>{{event.sanction}}</td>
+        <td><a *ngIf="event.htmlLink" href="{{event.htmlLink}}" target="_blank">More Info</a></td>
+      </tr>
+    </table>
+  </section>
+</section>
